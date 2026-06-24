@@ -16,6 +16,8 @@ class Transaction:
 
 transactions = []
 
+budgets = {}
+
 
 def load_transactions():
     global transactions
@@ -27,11 +29,17 @@ def load_transactions():
         transactions = []
 
 
-def category_breakdown():
-    total_expenses = sum(t.amount for t in transactions if t.type == 'expense')
-    category_totals = {}
-    for t in transactions:
-        if t.type == 'expense':
-            category_totals[t.category] = category_totals.get(t.category, 0) + t.amount
-    breakdown = {category: {'amount': amount, 'percentage': (amount / total_expenses * 100 if total_expenses > 0 else 0)} for category, amount in category_totals.items()}
-    return breakdown
+def load_budgets():
+    global budgets
+    try:
+        with open('budgets.json', 'r') as f:
+            budgets = json.load(f)
+    except FileNotFoundError:
+        budgets = {}
+
+
+def check_budget_warnings():
+    for category, limit in budgets.items():
+        total_expense = sum(t.amount for t in transactions if t.category == category and t.type == 'expense')
+        if total_expense >= limit * 0.8:
+            print(f'Warning: {category} spending at {total_expense} of {limit}')
