@@ -25,15 +25,13 @@ def load_transactions():
     except FileNotFoundError:
         transactions = []
 
-def save_transactions():
-    with open('budget_data.json', 'w') as f:
-        json.dump([t.__dict__ for t in transactions], f, default=str)
 
-def add_transaction(transaction):
-    transactions.append(transaction)
-    save_transactions()
-
-def list_transactions():
-    return transactions
-
-load_transactions()
+def monthly_summary():
+    total_income = sum(t.amount for t in transactions if t.type == 'income')
+    total_expenses = sum(t.amount for t in transactions if t.type == 'expense')
+    net_balance = total_income - total_expenses
+    return {
+        'total_income': total_income,
+        'total_expenses': total_expenses,
+        'net_balance': net_balance
+    }
