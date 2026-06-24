@@ -29,17 +29,7 @@ def load_transactions():
         transactions = []
 
 
-def load_budgets():
-    global budgets
-    try:
-        with open('budgets.json', 'r') as f:
-            budgets = json.load(f)
-    except FileNotFoundError:
-        budgets = {}
-
-
-def check_budget_warnings():
-    for category, limit in budgets.items():
-        total_expense = sum(t.amount for t in transactions if t.category == category and t.type == 'expense')
-        if total_expense >= limit * 0.8:
-            print(f'Warning: {category} spending at {total_expense} of {limit}')
+def filter_transactions_by_date(year_month):
+    year, month = year_month.split('-')
+    filtered = [t for t in transactions if t.date.strftime('%Y-%m') == f'{year}-{month}']
+    return filtered
