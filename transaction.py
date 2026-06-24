@@ -16,6 +16,7 @@ class Transaction:
 
 transactions = []
 
+
 def load_transactions():
     global transactions
     try:
@@ -26,12 +27,11 @@ def load_transactions():
         transactions = []
 
 
-def monthly_summary():
-    total_income = sum(t.amount for t in transactions if t.type == 'income')
+def category_breakdown():
     total_expenses = sum(t.amount for t in transactions if t.type == 'expense')
-    net_balance = total_income - total_expenses
-    return {
-        'total_income': total_income,
-        'total_expenses': total_expenses,
-        'net_balance': net_balance
-    }
+    category_totals = {}
+    for t in transactions:
+        if t.type == 'expense':
+            category_totals[t.category] = category_totals.get(t.category, 0) + t.amount
+    breakdown = {category: {'amount': amount, 'percentage': (amount / total_expenses * 100 if total_expenses > 0 else 0)} for category, amount in category_totals.items()}
+    return breakdown
