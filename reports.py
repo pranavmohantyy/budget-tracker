@@ -1,0 +1,1 @@
+import matplotlib.pyplot as plt\n\ndef generate_report(transactions):\n    # report generation logic would go here\n    pass

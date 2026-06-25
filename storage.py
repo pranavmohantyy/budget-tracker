@@ -1,0 +1,1 @@
+import json\n\ndef load_transactions(filename='budget_data.json'):\n    with open(filename, 'r') as file:\n        return json.load(file)\n\ndef save_transactions(transactions, filename='budget_data.json'):\n    with open(filename, 'w') as file:\n        json.dump(transactions, file, default=str)
